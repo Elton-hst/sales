@@ -6,11 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.UUID;
+
 @Builder @Data
 @EqualsAndHashCode
 public class OrderProduct {
 
-    private String id;
+    private UUID id;
     private Product product;
     private int quantity;
 
