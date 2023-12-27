@@ -1,41 +1,48 @@
 package br.com.microservices.sales.application.useCases;
 
+import br.com.microservices.sales.application.service.OrderService;
+import br.com.microservices.sales.domain.common.CommonProduct;
+import br.com.microservices.sales.domain.factory.ProductFactory;
 import br.com.microservices.sales.infrastructure.exception.OrderException;
-import br.com.microservices.sales.domain.configs.validation.Validator;
-import br.com.microservices.sales.domain.order.Order;
-import br.com.microservices.sales.domain.order.dto.CreateUpdadeOrderDto;
-import br.com.microservices.sales.domain.order.dto.GetOrderDto;
-import br.com.microservices.sales.domain.order.dto.validator.CreateUpdateOrderDtoValidator;
-import br.com.microservices.sales.domain.order.repository.OrderRepository;
+import br.com.microservices.sales.domain.common.CommonOrder;
+import br.com.microservices.sales.domain.repository.OrderRepository;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
-public class CreateOrderUseCases {
+public abstract class CreateOrderUseCases implements OrderService {
 
     private final OrderRepository repository;
-    public CreateOrderUseCases(OrderRepository repository) {
+    private final CreateProductUseCase createProductUseCase;
+    private final ProductFactory productFactory;
+    protected CreateOrderUseCases(OrderRepository repository, CreateProductUseCase createProductUseCase, ProductFactory productFactory) {
         this.repository = repository;
+        this.createProductUseCase = createProductUseCase;
+        this.productFactory = productFactory;
     }
-    private static final String TRANSACTION_ID_PATTERN = "%s_%s";
 
-    public GetOrderDto addOrder(CreateUpdadeOrderDto dto){
-        Validator.validate(new CreateUpdateOrderDtoValidator(), dto);
-        Order order = Order.builder()
-                .products(dto.getProducts())
+    @Override
+    public CommonOrder create(List<CommonProduct> products) {
+        var productList = productFactory.create(products);
+        var newProducts = createProductUseCase.create(productList);
+
+        CommonOrder order = CommonOrder.builder()
+                .products(newProducts)
                 .createdAt(LocalDateTime.now())
-                .transactionId(String.format(
-                        TRANSACTION_ID_PATTERN, Instant.now().toEpochMilli(), UUID.randomUUID()
-                ))
+                .transactionId(generateTransactionId())
                 .build();
+
         return createOrder(order);
     }
 
-    private GetOrderDto createOrder(Order order){
-        return repository.add(order)
-                .orElseThrow(() -> new OrderException("erro ao tentar criar"))
-                .getOrderDto();
+    private static String generateTransactionId() {
+        return String.format("%s_%s", Instant.now().toEpochMilli(), UUID.randomUUID());
     }
 
+    private CommonOrder createOrder(CommonOrder order) {
+        return repository.add(order)
+                .orElseThrow(() -> new OrderException("Error while trying to create an Order"));
+    }
 }

@@ -1,0 +1,13 @@
+
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ˆÀì²
+h
+java:S6204"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(ª™¨¹
+f
+java:S1128"KRemove this unused import 'br.com.microservices.sales.domain.entity.Order'.(è‰°¬øÿÿÿÿ
+V
+java:S1128";Remove this unused import 'lombok.RequiredArgsConstructor'.(ÑØŽúøÿÿÿÿ
+a
+java:S1128	"FRemove this unused import 'org.springframework.stereotype.Repository'.(¦ýÍýüÿÿÿÿ
+Y
+java:S1128
+"CRemove this unused import 'org.springframework.stereotype.Service'.(¼º¡Ú

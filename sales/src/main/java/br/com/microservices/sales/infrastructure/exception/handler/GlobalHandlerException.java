@@ -1,6 +1,7 @@
 package br.com.microservices.sales.infrastructure.exception.handler;
 
 import br.com.microservices.sales.infrastructure.exception.OrderException;
+import br.com.microservices.sales.infrastructure.exception.ProductException;
 import br.com.microservices.sales.infrastructure.exception.ValidatorException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,10 @@ public class GlobalHandlerException {
     public ResponseEntity<ErrorResponse> handlerOrderException(OrderException exception, HttpServletRequest request){
         return response(exception.getMessage(), request, HttpStatus.BAD_REQUEST, LocalDateTime.now());
     }
-
+    @ExceptionHandler(ProductException.class)
+    public ResponseEntity<ErrorResponse> handlerProductException(ProductException exception, HttpServletRequest request){
+        return response(exception.getMessage(), request, HttpStatus.BAD_REQUEST, LocalDateTime.now());
+    }
     @ExceptionHandler(ValidatorException.class)
     public ResponseEntity<ErrorResponse> handlerValidatorException(ValidatorException exception, HttpServletRequest request){
         return response(exception.getMessage(), request, HttpStatus.INTERNAL_SERVER_ERROR, LocalDateTime.now());
