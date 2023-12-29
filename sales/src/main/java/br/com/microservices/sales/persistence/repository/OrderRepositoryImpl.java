@@ -1,9 +1,8 @@
 package br.com.microservices.sales.persistence.repository;
 
 import br.com.microservices.sales.domain.common.CommonOrder;
-import br.com.microservices.sales.domain.entity.Order;
 import br.com.microservices.sales.domain.repository.OrderRepository;
-import br.com.microservices.sales.infrastructure.exception.OrderException;
+import br.com.microservices.sales.application.exception.OrderException;
 import br.com.microservices.sales.persistence.dao.OrderEntityDao;
 import br.com.microservices.sales.persistence.entity.OrderEntity;
 import lombok.RequiredArgsConstructor;

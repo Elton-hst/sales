@@ -2,7 +2,7 @@ package br.com.microservices.sales.persistence.repository;
 
 import br.com.microservices.sales.domain.common.CommonProduct;
 import br.com.microservices.sales.domain.repository.ProductRepository;
-import br.com.microservices.sales.infrastructure.exception.ProductException;
+import br.com.microservices.sales.application.exception.ProductException;
 import br.com.microservices.sales.persistence.dao.ProductEntityDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

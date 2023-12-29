@@ -1,4 +1,4 @@
-package br.com.microservices.sales.infrastructure.exception.handler;
+package br.com.microservices.sales.application.exception.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

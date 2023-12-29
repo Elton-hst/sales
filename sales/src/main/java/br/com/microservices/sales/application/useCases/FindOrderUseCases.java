@@ -12,19 +12,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class FindOrderUseCases implements OrderService {
+public abstract class FindOrderUseCases  {
 
-    private final OrderRepository repository;
-    protected FindOrderUseCases(OrderRepository repository) {
-        this.repository = repository;
-    }
-
-    public List<GetOrderDto> findAll(){
-        List<CommonOrder> order = repository.findAll();
-        return order
-                .stream()
-                .map(CommonOrder::getOrderDto)
-                .collect(Collectors.toList());
-    }
+//    private final OrderRepository repository;
+//    protected FindOrderUseCases(OrderRepository repository) {
+//        this.repository = repository;
+//    }
+//
+//    public List<GetOrderDto> findAll(){
+//        List<CommonOrder> order = repository.findAll();
+//        return order
+//                .stream()
+//                .map(CommonOrder::getOrderDto)
+//                .collect(Collectors.toList());
+//    }
 
 }

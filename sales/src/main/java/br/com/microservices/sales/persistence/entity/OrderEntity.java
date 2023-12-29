@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity(name = "ORDER_ENTITY")
 @Table(name = "ORDER_ENTITY")
@@ -27,10 +28,10 @@ public class OrderEntity extends BasicEntity {
     public CommonOrder toOrder() {
         return CommonOrder.builder()
                 .id(getId())
-//                .products(products
-//                        .stream()
-//                        .map(ProductEntity::toProduct)
-//                        .collect(Collectors.toList()))
+                .products(products
+                        .stream()
+                        .map(ProductEntity::toProduct)
+                        .collect(Collectors.toList()))
                 .quantity(quantity)
                 .createdAt(createdAt)
                 .totalAmount(totalAmount)

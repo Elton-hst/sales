@@ -1,6 +1,6 @@
 package br.com.microservices.sales.domain.configs.validation;
 
-import br.com.microservices.sales.infrastructure.exception.ValidatorException;
+import br.com.microservices.sales.application.exception.ValidatorException;
 
 import java.util.Map;
 
@@ -11,6 +11,7 @@ public interface Validator<T> {
 
     static <T> void validate(Validator<T> validator, T t) {
         var errors = validator.validate(t);
+
         if(!errors.isEmpty()) {
             var message = errors
                     .entrySet()

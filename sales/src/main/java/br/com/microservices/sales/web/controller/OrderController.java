@@ -21,10 +21,10 @@ public class OrderController {
         return new ResponseEntity<>(inserted, HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<?> findAll(){
-        var find = service.findAll();
-        return new ResponseEntity<>(find, HttpStatus.OK);
-    }
+//    @GetMapping
+//    public ResponseEntity<?> findAll(){
+//        var find = service.findAll();
+//        return new ResponseEntity<>(find, HttpStatus.OK);
+//    }
 
 }

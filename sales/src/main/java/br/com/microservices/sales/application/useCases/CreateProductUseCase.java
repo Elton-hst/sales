@@ -3,7 +3,7 @@ package br.com.microservices.sales.application.useCases;
 import br.com.microservices.sales.application.service.ProductService;
 import br.com.microservices.sales.domain.common.CommonProduct;
 import br.com.microservices.sales.domain.repository.ProductRepository;
-import br.com.microservices.sales.infrastructure.exception.ProductException;
+import br.com.microservices.sales.application.exception.ProductException;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,15 +1,15 @@
 package br.com.microservices.sales.domain.factory;
 
 import br.com.microservices.sales.domain.common.CommonProduct;
-import br.com.microservices.sales.domain.configs.factory.IProductFactory;
-import br.com.microservices.sales.infrastructure.exception.ProductException;
+import br.com.microservices.sales.domain.configs.factory.ProductFactory;
+import br.com.microservices.sales.application.exception.ProductException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ProductFactory implements IProductFactory {
+public class ProductFactoryImpl implements ProductFactory {
 
     @Override
     public List<CommonProduct> create(List<CommonProduct> products) {
