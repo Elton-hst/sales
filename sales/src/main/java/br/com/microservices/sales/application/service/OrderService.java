@@ -9,6 +9,6 @@ import java.util.List;
 public interface OrderService {
 
     CommonOrder create(List<CommonProduct> productList);
-    List<GetOrderDto> findAll();
+    //List<GetOrderDto> findAll();
 
 }

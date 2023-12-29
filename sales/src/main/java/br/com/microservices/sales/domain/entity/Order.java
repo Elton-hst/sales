@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface Order {
 
-    UUID id();
+    UUID getid();
     List<CommonProduct> products();
     String transactionId();
     int quantity();

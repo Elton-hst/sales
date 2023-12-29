@@ -21,46 +21,59 @@ public class CommonOrder implements Order {
     private double totalAmount;
     private int totalItems;
 
+    @Override
+    public UUID getid() {
+        return id;
+    }
+    @Override
+    public List<CommonProduct> products() {
+        return products;
+    }
+    @Override
+    public String transactionId() {
+        return transactionId;
+    }
+    @Override
+    public int quantity() {
+        return quantity;
+    }
+    @Override
+    public LocalDateTime createdAt() {
+        return createdAt;
+    }
+    @Override
+    public double totalAmount() {
+        return totalAmount;
+    }
+    @Override
+    public int totalItems() {
+        return totalItems;
+    }
+
     public GetOrderDto getOrderDto(){
         return GetOrderDto.builder()
-                .id(id)
-                .products(products)
-                .quantity(quantity)
-                .createdAt(createdAt)
-                .totalAmount(totalAmount)
-                .totalItems(totalItems)
-                .transactionId(transactionId)
+                .id(getid())
+                .products(products())
+                .quantity(quantity())
+                .createdAt(createdAt())
+                .totalAmount(totalAmount())
+                .totalItems(totalItems())
+                .transactionId(transactionId())
                 .build();
     }
 
     public OrderEntity toEntity() {
         return OrderEntity.builder()
-                .id(id)
-                .products(products
+                .id(getid())
+                .products(products()
                         .stream()
                         .map(CommonProduct::toEntity)
                         .collect(Collectors.toList()))
-                .quantity(quantity)
-                .createdAt(createdAt)
-                .totalAmount(totalAmount)
-                .totalItems(totalItems)
-                .transactionId(transactionId)
+                .quantity(quantity())
+                .createdAt(createdAt())
+                .totalAmount(totalAmount())
+                .totalItems(totalItems())
+                .transactionId(transactionId())
                 .build();
     }
-
-    @Override
-    public UUID id() { return id; }
-    @Override
-    public List<CommonProduct> products() { return products; }
-    @Override
-    public String transactionId() { return transactionId; }
-    @Override
-    public int quantity() { return quantity; }
-    @Override
-    public LocalDateTime createdAt() { return createdAt; }
-    @Override
-    public double totalAmount() { return totalAmount; }
-    @Override
-    public int totalItems() { return totalItems; }
-
 }

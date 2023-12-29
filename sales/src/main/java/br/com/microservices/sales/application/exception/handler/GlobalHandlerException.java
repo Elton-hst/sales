@@ -1,8 +1,8 @@
-package br.com.microservices.sales.infrastructure.exception.handler;
+package br.com.microservices.sales.application.exception.handler;
 
-import br.com.microservices.sales.infrastructure.exception.OrderException;
-import br.com.microservices.sales.infrastructure.exception.ProductException;
-import br.com.microservices.sales.infrastructure.exception.ValidatorException;
+import br.com.microservices.sales.application.exception.OrderException;
+import br.com.microservices.sales.application.exception.ProductException;
+import br.com.microservices.sales.application.exception.ValidatorException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package br.com.microservices.sales.infrastructure.exception;
+package br.com.microservices.sales.application.exception;
 
 public class ProductException extends RuntimeException{
     public ProductException(String menssage) {
