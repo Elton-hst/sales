@@ -2,10 +2,14 @@ package br.com.microservices.sales.application.useCases;
 
 import br.com.microservices.sales.application.service.OrderService;
 import br.com.microservices.sales.domain.common.CommonProduct;
+import br.com.microservices.sales.domain.configs.factory.OrderFactory;
+import br.com.microservices.sales.domain.configs.validation.Validator;
+import br.com.microservices.sales.domain.entity.Order;
 import br.com.microservices.sales.domain.factory.ProductFactoryImpl;
 import br.com.microservices.sales.application.exception.OrderException;
 import br.com.microservices.sales.domain.common.CommonOrder;
 import br.com.microservices.sales.domain.repository.OrderRepository;
+import br.com.microservices.sales.domain.validator.CreateUpdateOrderDtoValidator;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -16,32 +20,40 @@ public class CreateOrderUseCases implements OrderService {
 
     private final OrderRepository repository;
     private final CreateProductUseCase createProductUseCase;
-    private final ProductFactoryImpl productFactoryImpl;
-    public CreateOrderUseCases(OrderRepository repository, CreateProductUseCase createProductUseCase, ProductFactoryImpl productFactoryImpl) {
+    private final OrderFactory orderFactory;
+    private final CreateEventUseCases createEventUseCases;
+    public CreateOrderUseCases(OrderRepository repository, CreateProductUseCase createProductUseCase, OrderFactory orderFactory, CreateEventUseCases createEventUseCases) {
         this.repository = repository;
         this.createProductUseCase = createProductUseCase;
-        this.productFactoryImpl = productFactoryImpl;
+        this.orderFactory = orderFactory;
+        this.createEventUseCases = createEventUseCases;
     }
 
     public CommonOrder create(List<CommonProduct> products) {
-        var productList = productFactoryImpl.create(products);
-        var newProducts = createProductUseCase.create(productList);
+        var newProducts = createProductUseCase.create(products);
+        var create = orderFactory.create(newProducts);
+        Validator.validate(new CreateUpdateOrderDtoValidator(), create);
+        var order = add(create);
+        createEvent(order);
+        return add(order);
+    }
 
-        CommonOrder order = CommonOrder.builder()
-                .products(newProducts)
-                .createdAt(LocalDateTime.now())
+    private CommonOrder add(CommonOrder order) {
+        CommonOrder newOrder = CommonOrder.builder()
+                .products(order.getProducts())
                 .transactionId(generateTransactionId())
+                .createdAt(LocalDateTime.now())
                 .build();
 
-        return createOrder(order);
+        return repository.add(newOrder)
+                .orElseThrow(() -> new OrderException("Error while trying to create an Order"));
+    }
+
+    private void createEvent(CommonOrder order) {
+        var event = createEventUseCases.create(order);
     }
 
     private static String generateTransactionId() {
         return String.format("%s_%s", Instant.now().toEpochMilli(), UUID.randomUUID());
-    }
-
-    private CommonOrder createOrder(CommonOrder order) {
-        return repository.add(order)
-                .orElseThrow(() -> new OrderException("Error while trying to create an Order"));
     }
 }

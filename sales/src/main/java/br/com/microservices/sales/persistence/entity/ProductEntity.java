@@ -13,14 +13,14 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class ProductEntity extends BasicEntity{
 
-    private double unitValue;
     private String code;
+    private double unitValue;
 
     public CommonProduct toProduct() {
         return CommonProduct.builder()
                 .id(getId())
-                .unitValue(unitValue)
                 .code(code)
+                .unitValue(unitValue)
                 .build();
     }
 

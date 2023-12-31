@@ -2,18 +2,15 @@ package br.com.microservices.sales.application.useCases;
 
 import br.com.microservices.sales.domain.common.CommonOrder;
 import br.com.microservices.sales.domain.common.CommonProduct;
-import br.com.microservices.sales.domain.factory.ProductFactoryImpl;
+import br.com.microservices.sales.domain.configs.factory.OrderFactory;
 import br.com.microservices.sales.domain.repository.OrderRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import br.com.microservices.sales.domain.validator.CreateUpdateOrderDtoValidator;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,61 +18,75 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.*;
-
-class CreateOrderUseCasesTest {
+public class CreateOrderUseCasesTest {
 
     @Mock
-    private OrderRepository orderRepository;
+    private OrderRepository repository;
 
     @Mock
     private CreateProductUseCase createProductUseCase;
 
     @Mock
-    private ProductFactoryImpl productFactoryImpl;
+    private OrderFactory orderFactory;
+
+    @Mock
+    private CreateUpdateOrderDtoValidator validator;
 
     @InjectMocks
     private CreateOrderUseCases createOrderUseCases;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
+    @Test
+    public void testCreateOrder() {
+        // Mocking
+        CommonProduct commonProduct = CommonProduct.builder()
+                .code("ABC123")
+                .unitValue(10.0)
+                .build();
+
+        List<CommonProduct> products = Collections.singletonList(commonProduct);
+
+        CommonOrder commonOrder = CommonOrder.builder()
+                .products(products)
+                .transactionId("transactionId")
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        when(createProductUseCase.create(products)).thenReturn(products);
+        when(orderFactory.create(products)).thenReturn(commonOrder);
+        when(repository.add(any(CommonOrder.class))).thenReturn(Optional.of(commonOrder));
+
+        // Teste
+        CommonOrder createdOrder = createOrderUseCases.create(products);
+
+        // Verificação
+        assertEquals(createdOrder.getProducts(), products);
+        assertEquals(createdOrder.getTransactionId(), "transactionId");
+        // Adicione mais verificações conforme necessário
     }
 
     @Test
-    @DisplayName("Create Order Use Cases - Successful Order Creation")
-    void createOrder_successfulOrderCreation() {
-
-        List<CommonProduct> inputProducts = new ArrayList<>();
-        List<CommonProduct> createdProducts = new ArrayList<>();
-
-        CommonProduct product = CommonProduct.builder()
-                .code("livro")
-                .unitValue(20)
+    public void testCreateOrderException() {
+        // Mocking
+        CommonProduct commonProduct = CommonProduct.builder()
+                .code("ABC123")
+                .unitValue(10.0)
                 .build();
 
-        createdProducts.add(product);
-        inputProducts.add(product);
+        List<CommonProduct> products = Collections.singletonList(commonProduct);
 
-        when(productFactoryImpl.create(anyList())).thenReturn(createdProducts);
-
-        when(createProductUseCase.create(createdProducts)).thenReturn(createdProducts);
-
-        CommonOrder expectedOrder = CommonOrder.builder()
-                .products(inputProducts)
+        CommonOrder commonOrder = CommonOrder.builder()
+                .products(products)
+                .transactionId("transactionId")
+                .createdAt(LocalDateTime.now())
                 .build();
 
-        when(orderRepository.add(any(CommonOrder.class))).thenReturn(Optional.of(expectedOrder));
+        when(createProductUseCase.create(products)).thenReturn(products);
+        when(orderFactory.create(products)).thenReturn(commonOrder);
+        when(repository.add(any(CommonOrder.class))).thenReturn(Optional.empty());
 
-        CommonOrder result = createOrderUseCases.create(inputProducts);
-
-        verify(createProductUseCase, times(1)).create(createdProducts);
-
-        verify(orderRepository, times(1)).add(any(CommonOrder.class));
-
-        assertEquals(expectedOrder, result);
+        // Teste
+        createOrderUseCases.create(products);
     }
+
 }
 

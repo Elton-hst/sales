@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public interface Product {
 
-    UUID id();
-    String code();
-    double unitValue();
+    UUID getId();
+    String getCode();
+    double getUnitValue();
 
 }

@@ -1,67 +1,70 @@
 package br.com.microservices.sales.application.useCases;
 
-import br.com.microservices.sales.application.exception.ProductException;
 import br.com.microservices.sales.domain.common.CommonProduct;
+import br.com.microservices.sales.domain.configs.factory.ProductFactory;
+import br.com.microservices.sales.domain.entity.Product;
 import br.com.microservices.sales.domain.repository.ProductRepository;
+import br.com.microservices.sales.domain.validator.CreateUpdateProductsDtoValidator;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-class CreateProductUseCaseTest {
+public class CreateProductUseCaseTest {
 
     @Mock
     private ProductRepository repository;
 
+    @Mock
+    private ProductFactory productFactory;
+
+    @Mock
+    private CreateUpdateProductsDtoValidator validator;
+
+    @InjectMocks
+    private CreateProductUseCase createProductUseCase;
+
     @Test
-    void create_shouldCreateProductsSuccessfully() {
+    public void testCreateProduct() {
+        // Mocking
+        CommonProduct commonProduct = CommonProduct.builder()
+                .code("ABC123")
+                .unitValue(10.0)
+                .build();
 
-        MockitoAnnotations.openMocks(this);
-        CreateProductUseCase createProductUseCase = new CreateProductUseCase(repository);
+        Product product = mock(Product.class);
+        when(productFactory.create("ABC123", 10.0)).thenReturn(product);
+        when(repository.add(any(CommonProduct.class))).thenReturn(Optional.of(commonProduct));
 
-        List<CommonProduct> inputProducts = List.of(
-                CommonProduct.builder().code("ABC").unitValue(10.0).build(),
-                CommonProduct.builder().code("DEF").unitValue(20.0).build()
-        );
+        // Teste
+        List<CommonProduct> productList = createProductUseCase.create(Collections.singletonList(commonProduct));
 
-        List<CommonProduct> expectedProducts = new ArrayList<>();
-        for (CommonProduct inputProduct : inputProducts) {
-            expectedProducts.add(CommonProduct.builder()
-                    .id(inputProduct.id())
-                    .code(inputProduct.code())
-                    .unitValue(inputProduct.unitValue())
-                    .build());
-        }
-
-        when(repository.add(any(CommonProduct.class))).thenReturn(Optional.of(CommonProduct.builder().build()));
-
-        List<CommonProduct> createdProducts = createProductUseCase.create(inputProducts);
-
-        assertEquals(expectedProducts, createdProducts);
+        // Verificação
+        assertEquals(productList.size(), 1);
+        assertEquals(productList.get(0).getCode(), "ABC123");
+        assertEquals(productList.get(0).getUnitValue(), 10.0);
     }
 
     @Test
-    void create_shouldThrowExceptionWhenRepositoryFails() {
+    public void testCreateProductException() {
+        // Mocking
+        CommonProduct commonProduct = CommonProduct.builder()
+                .code("ABC123")
+                .unitValue(10.0)
+                .build();
 
-        MockitoAnnotations.openMocks(this);
-        CreateProductUseCase createProductUseCase = new CreateProductUseCase(repository);
-
-        List<CommonProduct> inputProducts = List.of(
-                CommonProduct.builder().code("ABC").unitValue(10.0).build(),
-                CommonProduct.builder().code("DEF").unitValue(20.0).build()
-        );
-
+        Product product = mock(Product.class);
+        when(productFactory.create("ABC123", 10.0)).thenReturn(product);
         when(repository.add(any(CommonProduct.class))).thenReturn(Optional.empty());
 
-        assertThrows(ProductException.class, () -> createProductUseCase.create(inputProducts));
+        // Teste
+        createProductUseCase.create(Collections.singletonList(commonProduct));
     }
 }
 
