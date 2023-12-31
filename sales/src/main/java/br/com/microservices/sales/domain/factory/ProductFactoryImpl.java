@@ -2,31 +2,18 @@ package br.com.microservices.sales.domain.factory;
 
 import br.com.microservices.sales.domain.common.CommonProduct;
 import br.com.microservices.sales.domain.configs.factory.ProductFactory;
-import br.com.microservices.sales.application.exception.ProductException;
+import br.com.microservices.sales.domain.entity.Product;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ProductFactoryImpl implements ProductFactory {
 
     @Override
-    public List<CommonProduct> create(List<CommonProduct> products) {
-        List<CommonProduct> commonProductList = new ArrayList<>();
-
-        for (CommonProduct product: products) {
-
-            switch (product.code()) {
-                case "livro" -> commonProductList.add(product);
-                case "quandrinhos" -> commonProductList.add(product);
-                case "filme" -> commonProductList.add(product);
-                default -> throw new ProductException("valor invalido");
-            };
-
-        }
-
-        return commonProductList;
+    public Product create(String code, double unitValue) {
+        return CommonProduct.builder()
+                .code(code)
+                .unitValue(unitValue)
+                .build();
     }
 
 }

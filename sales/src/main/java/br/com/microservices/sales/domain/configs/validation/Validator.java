@@ -20,6 +20,5 @@ public interface Validator<T> {
                     .collect(joining(", "));
             throw new ValidatorException("[VALIDATION ERRORS]: " + message);
         }
-
     }
 }

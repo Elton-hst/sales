@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class OrderEntity extends BasicEntity {
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ProductEntity> products;
     private int quantity;
     private LocalDateTime createdAt;
@@ -28,15 +28,14 @@ public class OrderEntity extends BasicEntity {
     public CommonOrder toOrder() {
         return CommonOrder.builder()
                 .id(getId())
-                .products(products
-                        .stream()
+                .products(products.stream()
                         .map(ProductEntity::toProduct)
                         .collect(Collectors.toList()))
                 .quantity(quantity)
                 .createdAt(createdAt)
+                .transactionId(transactionId)
                 .totalAmount(totalAmount)
                 .totalItems(totalItems)
-                .transactionId(transactionId)
                 .build();
     }
 

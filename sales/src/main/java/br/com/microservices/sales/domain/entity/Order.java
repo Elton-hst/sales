@@ -8,13 +8,13 @@ import java.util.UUID;
 
 public interface Order {
 
-    UUID getid();
-    List<CommonProduct> products();
-    String transactionId();
-    int quantity();
-    LocalDateTime createdAt();
-    double totalAmount();
-    int totalItems();
+    UUID getId();
+    List<CommonProduct> getProducts();
+    String getTransactionId();
+    int getQuantity();
+    LocalDateTime getCreatedAt();
+    double getTotalAmount();
+    int getTotalItems();
 
 
 }

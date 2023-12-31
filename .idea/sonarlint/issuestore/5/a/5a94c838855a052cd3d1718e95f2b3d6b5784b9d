@@ -1,3 +1,0 @@
-
-h
-java:S6204G"RReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()'(‰“êà

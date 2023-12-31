@@ -1,7 +1,6 @@
 package br.com.microservices.sales.web.response;
 
 import br.com.microservices.sales.domain.common.CommonProduct;
-import br.com.microservices.sales.domain.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
