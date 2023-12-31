@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public interface History {
 
-    String source();
-    String status();
-    String message();
-    LocalDateTime createAt();
+    String getSource();
+    String getStatus();
+    String getMessage();
+    LocalDateTime getCreateAt();
 
 }

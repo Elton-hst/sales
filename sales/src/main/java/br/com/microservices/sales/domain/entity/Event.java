@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public interface Event {
 
-    UUID id();
-    String transactionId();
-    UUID orderId();
-    CommonOrder payload();
-    String source();
-    String status();
-    List<CommonHistory> eventHistory();
-    LocalDateTime createdAt();
+    UUID getId();
+    String getTransactionId();
+    UUID getOrderId();
+    CommonOrder getPayload();
+    String getSource();
+    String getStatus();
+    List<CommonHistory> getEventHistory();
+    LocalDateTime getCreatedAt();
 
 }

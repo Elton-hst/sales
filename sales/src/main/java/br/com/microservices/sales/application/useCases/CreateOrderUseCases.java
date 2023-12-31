@@ -21,17 +21,21 @@ public class CreateOrderUseCases implements OrderService {
     private final OrderRepository repository;
     private final CreateProductUseCase createProductUseCase;
     private final OrderFactory orderFactory;
-    public CreateOrderUseCases(OrderRepository repository, CreateProductUseCase createProductUseCase, OrderFactory orderFactory) {
+    private final CreateEventUseCases createEventUseCases;
+    public CreateOrderUseCases(OrderRepository repository, CreateProductUseCase createProductUseCase, OrderFactory orderFactory, CreateEventUseCases createEventUseCases) {
         this.repository = repository;
         this.createProductUseCase = createProductUseCase;
         this.orderFactory = orderFactory;
+        this.createEventUseCases = createEventUseCases;
     }
 
     public CommonOrder create(List<CommonProduct> products) {
         var newProducts = createProductUseCase.create(products);
         var create = orderFactory.create(newProducts);
         Validator.validate(new CreateUpdateOrderDtoValidator(), create);
-        return add(create);
+        var order = add(create);
+        createEvent(order);
+        return add(order);
     }
 
     private CommonOrder add(CommonOrder order) {
@@ -43,6 +47,10 @@ public class CreateOrderUseCases implements OrderService {
 
         return repository.add(newOrder)
                 .orElseThrow(() -> new OrderException("Error while trying to create an Order"));
+    }
+
+    private void createEvent(CommonOrder order) {
+        var event = createEventUseCases.create(order);
     }
 
     private static String generateTransactionId() {

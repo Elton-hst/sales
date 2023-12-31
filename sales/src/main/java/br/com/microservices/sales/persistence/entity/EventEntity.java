@@ -4,6 +4,7 @@ import br.com.microservices.sales.domain.common.CommonEvent;
 import br.com.microservices.sales.domain.common.CommonHistory;
 import br.com.microservices.sales.domain.common.CommonOrder;
 import br.com.microservices.sales.persistence.entity.basic.BasicEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -25,11 +26,11 @@ public class EventEntity extends BasicEntity {
 
     private String transactionId;
     private UUID orderId;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private OrderEntity payload;
     private String source;
     private String status;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<HistoryEntity> eventHistory;
     private LocalDateTime createdAt;
 
