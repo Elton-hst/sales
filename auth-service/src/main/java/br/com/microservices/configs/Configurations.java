@@ -19,32 +19,39 @@ import org.springframework.security.web.SecurityFilterChain;
 public class Configurations {
 
     @Bean
-    SecurityFilterChain web(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/swagger-ui-custom.html/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/home/criar").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/home/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/home").permitAll()
-                        .anyRequest().permitAll()
-                )
-                .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
-        return http.build();
+    public SecurityFilterChain web(HttpSecurity http) throws Exception {
+        try {
+            return http
+                    .csrf(AbstractHttpConfigurer::disable)
+                    .sessionManagement((session) -> session
+                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                    .authorizeHttpRequests((authorize) -> authorize
+                            .requestMatchers("/", "/h2-console/**").permitAll()
+                            .requestMatchers("/", "/swagger-ui-custom.html/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/home/criar").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/home/**").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/api/home").permitAll()
+                            .anyRequest().permitAll()
+                    ).build();
+        } catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        try {
+            return authenticationConfiguration.getAuthenticationManager();
+        } catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
     }
 
 }
