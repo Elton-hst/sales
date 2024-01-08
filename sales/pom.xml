@@ -11,9 +11,9 @@
 	<groupId>br.com.microservices</groupId>
 	<artifactId>sales</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sales</name>
+    <name>sales</name>
 	<description>Demo project for Spring Boot</description>
-	<properties>
+    <properties>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
