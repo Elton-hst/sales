@@ -14,17 +14,4 @@ public interface OrderFactory {
 
     CommonOrder create(List<CommonProduct> products);
 
-//    static <T> void validate(OrderFactory<T> validator, T t) {
-//        var errors = validator.validate(t);
-//
-//        if(!errors.isEmpty()) {
-//            var message = errors
-//                    .entrySet()
-//                    .stream()
-//                    .map(e-> e.getKey() + ": " + e.getValue())
-//                    .collect(joining(", "));
-//            throw new ValidatorException("[VALIDATION ERRORS]: " + message);
-//        }
-//    }
-
 }

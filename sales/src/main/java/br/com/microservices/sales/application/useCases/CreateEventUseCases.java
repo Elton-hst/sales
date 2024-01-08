@@ -3,6 +3,7 @@ package br.com.microservices.sales.application.useCases;
 import br.com.microservices.sales.application.exception.EventException;
 import br.com.microservices.sales.domain.common.CommonEvent;
 import br.com.microservices.sales.domain.common.CommonOrder;
+import br.com.microservices.sales.domain.entity.Event;
 import br.com.microservices.sales.domain.repository.EventRepository;
 import br.com.microservices.sales.infrastructure.message.producer.SagaProducer;
 import br.com.microservices.sales.infrastructure.utils.JsonUtil;
