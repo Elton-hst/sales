@@ -1,6 +1,6 @@
 package br.com.microservices.controller;
 
-import br.com.microservices.model.User;
+import br.com.microservices.model.user.User;
 import br.com.microservices.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ public class UserController {
         User newUser = User.builder()
                 .userName(user.getUsername())
                 .password(passwordEncoder.encode(user.getPassword()))
+                .role(user.getRole())
                 .build();
         var created = repository.save(newUser);
         return ResponseEntity.ok(created);
