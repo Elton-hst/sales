@@ -1,4 +1,4 @@
-package br.com.microservices.service;
+package br.com.microservices.infra.security;
 
 import br.com.microservices.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,18 +10,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private final UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        try {
-            return repository.findByUserName(username);
-        } catch (UsernameNotFoundException e) {
-            throw new UsernameNotFoundException(e.getMessage());
-        }
+        return repository.findByUserName(username)
+                .map(UserAuthenticated::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
     }
 
 }
