@@ -1,10 +1,8 @@
 package br.com.microservices.controller;
 
-import br.com.microservices.model.User;
-import br.com.microservices.dto.Auth;
-import br.com.microservices.dto.TokenDTO;
-import br.com.microservices.service.JwtService;
-import lombok.AllArgsConstructor;
+import br.com.microservices.model.user.User;
+import br.com.microservices.model.user.dto.Auth;
+import br.com.microservices.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,19 +12,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
-
 @RestController
 @RequestMapping("api/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
+    private final TokenService tokenService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService) {
+    public AuthController(AuthenticationManager authenticationManager, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
@@ -39,7 +35,7 @@ public class AuthController {
         try {
             Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
             var usuario = (User) authentication.getPrincipal();
-            return jwtService.createToken(usuario);
+            return tokenService.createToken(usuario);
         } catch (Exception e) {
             return "Falha na autenticação: " + e.getMessage();
         }
