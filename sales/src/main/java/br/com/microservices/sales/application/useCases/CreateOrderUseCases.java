@@ -1,13 +1,11 @@
 package br.com.microservices.sales.application.useCases;
 
+import br.com.microservices.sales.application.exception.OrderException;
 import br.com.microservices.sales.application.service.OrderService;
+import br.com.microservices.sales.domain.common.CommonOrder;
 import br.com.microservices.sales.domain.common.CommonProduct;
 import br.com.microservices.sales.domain.configs.factory.OrderFactory;
 import br.com.microservices.sales.domain.configs.validation.Validator;
-import br.com.microservices.sales.domain.entity.Order;
-import br.com.microservices.sales.domain.factory.ProductFactoryImpl;
-import br.com.microservices.sales.application.exception.OrderException;
-import br.com.microservices.sales.domain.common.CommonOrder;
 import br.com.microservices.sales.domain.repository.OrderRepository;
 import br.com.microservices.sales.domain.validator.CreateUpdateOrderDtoValidator;
 
@@ -34,7 +32,7 @@ public class CreateOrderUseCases implements OrderService {
         var create = orderFactory.create(newProducts);
         Validator.validate(new CreateUpdateOrderDtoValidator(), create);
         var order = add(create);
-        createEvent(order);
+        //createEvent(order);
         return add(order);
     }
 

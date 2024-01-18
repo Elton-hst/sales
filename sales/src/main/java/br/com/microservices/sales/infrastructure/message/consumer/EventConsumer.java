@@ -1,6 +1,8 @@
 package br.com.microservices.sales.infrastructure.message.consumer;
 
-import br.com.microservices.sales.application.useCases.NotifyEndingUseCases;
+import br.com.microservices.sales.application.exception.EventException;
+import br.com.microservices.sales.domain.common.CommonOrder;
+import br.com.microservices.sales.domain.repository.OrderRepository;
 import br.com.microservices.sales.infrastructure.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +16,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EventConsumer {
 
-    private final NotifyEndingUseCases notifyEnding;
     private final JsonUtil jsonUtil;
+    private final OrderRepository repository;
 
     @KafkaListener(
-            groupId = "${spring.kafka.consumer.group-id}",
-            topics = "${spring.kafka.topic.notify-ending}"
+            groupId = "order-group",
+            topics = "start-saga"
     )
     public void consumeNotifyEndingEvent(String payload) {
-        log.info("Receiving ending notification event {} from notify-ending topic", payload);
-        var event = jsonUtil.toEvent(payload);
-        notifyEnding.notifyEnding(event);
+        try {
+            log.info("cosumer: {}", payload);
+            var result = (CommonOrder) jsonUtil.toEvent(payload);
+            repository.add(result);
+        } catch (EventException e){
+            throw new EventException("erro ao tentar consumir o evento");
+        }
     }
 }
