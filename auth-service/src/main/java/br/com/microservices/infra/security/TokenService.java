@@ -1,4 +1,4 @@
-package br.com.microservices.service;
+package br.com.microservices.infra.security;
 
 import com.auth0.jwt.JWT;
 import br.com.microservices.model.user.User;
@@ -12,10 +12,14 @@ import java.util.Date;
 @Service
 public class TokenService {
 
-    public String createToken(User user) {
+    public String createToken(UserAuthenticated userAuthenticated) {
+        var user = User.builder()
+                .userName(userAuthenticated.getUsername())
+                .build();
+
         return JWT.create()
                 .withIssuer("products")
-                .withSubject(user.getUsername())
+                .withSubject(user.getUserName())
                 .withClaim("id", user.getId())
                 .withExpiresAt(getExpirationAt())
                 .sign(Algorithm.HMAC256("secreta"));

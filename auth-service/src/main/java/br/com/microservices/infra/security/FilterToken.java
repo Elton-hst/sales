@@ -1,7 +1,7 @@
 package br.com.microservices.infra.security;
 
 import br.com.microservices.repository.UserRepository;
-import br.com.microservices.service.TokenService;
+import br.com.microservices.service.exception.AuthException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,8 +27,10 @@ public class FilterToken extends OncePerRequestFilter {
         var token = recoverToken(request);
         if(token != null) {
             var subject = service.getSubject(token);
-            var user = this.repository.findByUserName(subject);
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            var user = this.repository.findByUserName(subject)
+                    .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username"));
+            var userAuthenticated = new UserAuthenticated(user);
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, userAuthenticated.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

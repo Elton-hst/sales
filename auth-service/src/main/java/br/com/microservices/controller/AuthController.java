@@ -1,8 +1,9 @@
 package br.com.microservices.controller;
 
+import br.com.microservices.infra.security.UserAuthenticated;
 import br.com.microservices.model.user.User;
 import br.com.microservices.model.user.dto.Auth;
-import br.com.microservices.service.TokenService;
+import br.com.microservices.infra.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,8 +35,8 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.userName(), request.password());
         try {
             Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
-            var usuario = (User) authentication.getPrincipal();
-            return tokenService.createToken(usuario);
+            var userAuthenticated = (UserAuthenticated) authentication.getPrincipal();
+            return tokenService.createToken(userAuthenticated);
         } catch (Exception e) {
             return "Falha na autenticação: " + e.getMessage();
         }

@@ -1,6 +1,7 @@
 package br.com.microservices.sales.infrastructure.utils;
 
-import br.com.microservices.sales.domain.entity.Event;
+import br.com.microservices.sales.application.exception.EventException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,11 +20,11 @@ public class JsonUtil {
         }
     }
 
-    public Event toEvent(String json) {
+    public Object toEvent(String json) {
         try {
-            return objectMapper.readValue(json, Event.class);
-        } catch (Exception ex) {
-            return null;
+            return objectMapper.readValue(json, Object.class);
+        } catch (EventException | JsonProcessingException e) {
+            throw new EventException("erro ao converter o evento");
         }
     }
 }
