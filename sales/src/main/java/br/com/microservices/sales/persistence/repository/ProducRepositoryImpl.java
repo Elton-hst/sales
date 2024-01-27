@@ -1,9 +1,10 @@
 package br.com.microservices.sales.persistence.repository;
 
-import br.com.microservices.sales.domain.common.CommonProduct;
-import br.com.microservices.sales.domain.repository.ProductRepository;
+import br.com.microservices.sales.application.common.CommonProduct;
 import br.com.microservices.sales.application.exception.ProductException;
+import br.com.microservices.sales.domain.repository.ProductRepository;
 import br.com.microservices.sales.persistence.dao.ProductEntityDao;
+import br.com.microservices.sales.persistence.entity.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +22,10 @@ public class ProducRepositoryImpl implements ProductRepository {
     public Optional<CommonProduct> add(CommonProduct product) {
         var inserted = dao.save(product.toEntity());
         return Optional.of(inserted.toProduct());
+    }
+    public Optional<ProductEntity> newAdd(ProductEntity product) {
+        var inserted = dao.save(product);
+        return Optional.of(inserted);
     }
 
     @Override

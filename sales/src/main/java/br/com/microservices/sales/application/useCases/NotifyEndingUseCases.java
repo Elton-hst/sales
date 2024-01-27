@@ -1,6 +1,6 @@
 package br.com.microservices.sales.application.useCases;
 
-import br.com.microservices.sales.domain.common.CommonEvent;
+import br.com.microservices.sales.application.common.CommonEvent;
 import br.com.microservices.sales.domain.entity.Event;
 import lombok.extern.slf4j.Slf4j;
 

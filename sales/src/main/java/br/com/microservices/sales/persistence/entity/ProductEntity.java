@@ -1,13 +1,13 @@
 package br.com.microservices.sales.persistence.entity;
 
-import br.com.microservices.sales.domain.common.CommonProduct;
+import br.com.microservices.sales.application.common.CommonProduct;
 import br.com.microservices.sales.persistence.entity.basic.BasicEntity;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity(name = "PRODUCT_ENTITY")
-@Getter @Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor

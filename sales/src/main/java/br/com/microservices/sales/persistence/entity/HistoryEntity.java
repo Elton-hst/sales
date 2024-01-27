@@ -1,6 +1,6 @@
 package br.com.microservices.sales.persistence.entity;
 
-import br.com.microservices.sales.domain.common.CommonHistory;
+import br.com.microservices.sales.application.common.CommonHistory;
 import br.com.microservices.sales.persistence.entity.basic.BasicEntity;
 import jakarta.persistence.Entity;
 import lombok.Getter;

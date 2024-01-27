@@ -1,15 +1,12 @@
 package br.com.microservices.sales.persistence.entity;
 
-import br.com.microservices.sales.domain.common.CommonEvent;
-import br.com.microservices.sales.domain.common.CommonHistory;
-import br.com.microservices.sales.domain.common.CommonOrder;
+import br.com.microservices.sales.application.common.CommonEvent;
 import br.com.microservices.sales.persistence.entity.basic.BasicEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -21,7 +18,6 @@ import java.util.stream.Collectors;
 @Entity
 @Getter @Setter
 @SuperBuilder
-@NoArgsConstructor
 public class EventEntity extends BasicEntity {
 
     private String transactionId;

@@ -1,7 +1,7 @@
 package br.com.microservices.sales.domain.entity;
 
-import br.com.microservices.sales.domain.common.CommonHistory;
-import br.com.microservices.sales.domain.common.CommonOrder;
+import br.com.microservices.sales.application.common.CommonHistory;
+import br.com.microservices.sales.application.common.CommonOrder;
 
 import java.time.LocalDateTime;
 import java.util.List;

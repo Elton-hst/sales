@@ -1,7 +1,7 @@
 package br.com.microservices.sales.infrastructure.message.consumer;
 
+import br.com.microservices.sales.application.common.CommonOrder;
 import br.com.microservices.sales.application.exception.EventException;
-import br.com.microservices.sales.domain.common.CommonOrder;
 import br.com.microservices.sales.domain.repository.OrderRepository;
 import br.com.microservices.sales.infrastructure.utils.JsonUtil;
 import lombok.RequiredArgsConstructor;

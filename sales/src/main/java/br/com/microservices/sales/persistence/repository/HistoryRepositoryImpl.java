@@ -1,6 +1,6 @@
 package br.com.microservices.sales.persistence.repository;
 
-import br.com.microservices.sales.domain.common.CommonHistory;
+import br.com.microservices.sales.application.common.CommonHistory;
 import br.com.microservices.sales.domain.repository.HistoryRepository;
 import br.com.microservices.sales.persistence.dao.HistoryEntityDao;
 import lombok.RequiredArgsConstructor;

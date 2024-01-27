@@ -1,6 +1,6 @@
 package br.com.microservices.sales.application.useCases;
 
-import br.com.microservices.sales.domain.common.CommonProduct;
+import br.com.microservices.sales.application.common.CommonProduct;
 import br.com.microservices.sales.domain.configs.factory.ProductFactory;
 import br.com.microservices.sales.domain.entity.Product;
 import br.com.microservices.sales.domain.repository.ProductRepository;

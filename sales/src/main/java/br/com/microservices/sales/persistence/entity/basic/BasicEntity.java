@@ -1,6 +1,9 @@
 package br.com.microservices.sales.persistence.entity.basic;
 
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,8 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-@Getter
-@SuperBuilder
+@Getter @SuperBuilder
 @MappedSuperclass
 public class BasicEntity {
 

@@ -1,7 +1,7 @@
 package br.com.microservices.sales.application.useCases;
 
-import br.com.microservices.sales.domain.common.CommonOrder;
-import br.com.microservices.sales.domain.common.CommonProduct;
+import br.com.microservices.sales.application.common.CommonOrder;
+import br.com.microservices.sales.application.common.CommonProduct;
 import br.com.microservices.sales.domain.configs.factory.OrderFactory;
 import br.com.microservices.sales.domain.repository.OrderRepository;
 import br.com.microservices.sales.domain.validator.CreateUpdateOrderDtoValidator;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class CreateOrderUseCasesTest {
 
