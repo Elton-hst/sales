@@ -12,7 +12,7 @@ public class CreateUpdateProductsDtoValidator implements Validator<Product> {
     public Map<String, String> validate(Product product) {
         Map<String, String> errors = new HashMap<>();
 
-        if(product.getCode() == null) {
+        if(product.code() == null) {
             errors.put("produto", "é nulo");
         }
 

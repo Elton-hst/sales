@@ -7,14 +7,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="sales" />
         <module name="auth-service" />
+        <module name="orchestrator-service" />
+        <module name="payment-service" />
+        <module name="inventory-service" />
+        <module name="sales" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-service" options="-parameters" />
+      <module name="inventory-service" options="-parameters" />
+      <module name="orchestrator-service" options="-parameters" />
+      <module name="payment-service" options="-parameters" />
       <module name="sales" options="-parameters" />
     </option>
   </component>

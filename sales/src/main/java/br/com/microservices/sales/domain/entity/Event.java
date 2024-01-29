@@ -1,21 +1,39 @@
 package br.com.microservices.sales.domain.entity;
 
-import br.com.microservices.sales.domain.common.CommonHistory;
-import br.com.microservices.sales.domain.common.CommonOrder;
+import br.com.microservices.sales.persistence.entity.EventEntity;
+import br.com.microservices.sales.web.response.GetEventDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
-public interface Event {
+public record Event(
+        UUID id,
+        Order payload,
+        String source,
+        String status,
+        LocalDateTime createdAt) {
 
-    UUID getId();
-    String getTransactionId();
-    UUID getOrderId();
-    CommonOrder getPayload();
-    String getSource();
-    String getStatus();
-    List<CommonHistory> getEventHistory();
-    LocalDateTime getCreatedAt();
+    public Event(Order payload, String source, String status, LocalDateTime createdAt) {
+        this(null, payload, source, status, createdAt);
+    }
+
+    public GetEventDto toEventDto() {
+        return GetEventDto.builder()
+                .order(payload)
+                .status(status)
+                .source(source)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    public EventEntity toEntity() {
+        return EventEntity.builder()
+                .id(id)
+                .payload(payload.toEntity())
+                .status(status)
+                .source(source)
+                .createdAt(createdAt)
+                .build();
+    }
 
 }

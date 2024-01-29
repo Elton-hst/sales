@@ -1,7 +1,7 @@
 package br.com.microservices.infra.security;
 
-import com.auth0.jwt.JWT;
 import br.com.microservices.model.user.User;
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.stereotype.Service;
 

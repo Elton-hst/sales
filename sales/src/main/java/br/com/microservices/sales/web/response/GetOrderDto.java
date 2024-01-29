@@ -1,26 +1,33 @@
 package br.com.microservices.sales.web.response;
 
-import br.com.microservices.sales.domain.common.CommonProduct;
-import lombok.AllArgsConstructor;
+import br.com.microservices.sales.domain.entity.Order;
+import br.com.microservices.sales.domain.entity.Product;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-@Builder @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class GetOrderDto {
+@Builder
+public record GetOrderDto(
+        UUID id,
+        Set<Product> products,
+        int quantity,
+        LocalDateTime createdAt,
+        String transactionId,
+        double totalAmount,
+        int totalItems) {
 
-    private UUID id;
-    private List<CommonProduct> products;
-    private int quantity;
-    private LocalDateTime createdAt;
-    private String transactionId;
-    private double totalAmount;
-    private int totalItems;
+    public Order toOrder() {
+        return new Order(
+                id,
+                products,
+                quantity,
+                createdAt,
+                transactionId,
+                totalAmount,
+                totalItems
+        );
+    }
 
 }

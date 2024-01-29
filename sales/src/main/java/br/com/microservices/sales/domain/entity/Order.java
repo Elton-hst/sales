@@ -1,20 +1,55 @@
 package br.com.microservices.sales.domain.entity;
 
-import br.com.microservices.sales.domain.common.CommonProduct;
+import br.com.microservices.sales.persistence.entity.OrderEntity;
+import br.com.microservices.sales.persistence.entity.ProductEntity;
+import br.com.microservices.sales.web.response.GetOrderDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-public interface Order {
+public record Order(
+        UUID id,
+        Set<Product> products,
+        int quantity,
+        LocalDateTime createdAt,
+        String transactionId,
+        double totalAmount,
+        int totalItems) {
 
-    UUID getId();
-    List<CommonProduct> getProducts();
-    String getTransactionId();
-    int getQuantity();
-    LocalDateTime getCreatedAt();
-    double getTotalAmount();
-    int getTotalItems();
+    public Order(Set<Product> products) {
+        this(null, products, 0, null, null, 0, 0);
+    }
 
+    public Order(Set<Product> products, LocalDateTime createdAt, String transactionId) {
+        this(null, products, 0, createdAt, transactionId, 0, 0);
+    }
+
+    public GetOrderDto toOrderDto() {
+        return GetOrderDto.builder()
+                .id(id)
+                .products(products)
+                .quantity(quantity)
+                .createdAt(createdAt)
+                .transactionId(transactionId)
+                .totalAmount(totalAmount)
+                .totalItems(totalItems)
+                .build();
+    }
+
+    public OrderEntity toEntity() {
+        return OrderEntity.builder()
+                .id(id)
+                .products(products.stream()
+                        .map(product -> new ProductEntity(product.code(), product.unitValue()))
+                        .collect(Collectors.toSet()))
+                .quantity(quantity)
+                .createdAt(createdAt)
+                .totalAmount(totalAmount)
+                .totalItems(totalItems)
+                .transactionId(transactionId)
+                .build();
+    }
 
 }

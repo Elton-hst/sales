@@ -1,27 +1,27 @@
 package br.com.microservices.sales.web.controller;
 
-import br.com.microservices.sales.application.service.ProductService;
-import br.com.microservices.sales.domain.common.CommonProduct;
+import br.com.microservices.sales.application.facede.ProductFacede;
+import br.com.microservices.sales.web.request.CreateUpdateProductDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping({"/Product"})
 public class ProductController {
 
-    private final ProductService service;
+    private final ProductFacede useCase;
 
     @PostMapping({"/criar"})
-    public ResponseEntity<?> createProduct(@RequestBody List<CommonProduct> products) {
-        var inserted = service.create(products);
+    public ResponseEntity<?> createProduct(@RequestBody Set<CreateUpdateProductDto> products) {
+        var inserted = useCase.createProduct(products);
         return new ResponseEntity<>(inserted, HttpStatus.CREATED);
     }
 
