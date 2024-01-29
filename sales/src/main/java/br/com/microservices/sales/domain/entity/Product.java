@@ -1,11 +1,22 @@
 package br.com.microservices.sales.domain.entity;
 
+import br.com.microservices.sales.persistence.entity.ProductEntity;
+
 import java.util.UUID;
 
-public interface Product {
+public record Product(
+        UUID id,
+        String code,
+        double unitValue) {
 
-    UUID getId();
-    String getCode();
-    double getUnitValue();
+    public Product(String code, double unitValue) {
+        this(null, code, unitValue);
+    }
 
+    public ProductEntity toEntity() {
+        return ProductEntity.builder()
+                .code(code)
+                .unitValue(unitValue)
+                .build();
+    }
 }

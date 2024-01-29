@@ -15,9 +15,6 @@ public class CreateUpdateOrderDtoValidator implements Validator<Order> {
         if (order == null){
             errors.put("Order", "é nulo");
         }
-        if (order.getProducts().isEmpty()) {
-            errors.put("Order de Produtos", "estão nulos");
-        }
 
         return errors;
     }

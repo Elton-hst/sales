@@ -1,44 +1,32 @@
 package br.com.microservices.sales.application.useCases;
 
-import br.com.microservices.sales.application.common.CommonProduct;
-import br.com.microservices.sales.application.exception.ProductException;
 import br.com.microservices.sales.domain.configs.factory.ProductFactory;
 import br.com.microservices.sales.domain.configs.validation.Validator;
 import br.com.microservices.sales.domain.entity.Product;
-import br.com.microservices.sales.domain.repository.ProductRepository;
 import br.com.microservices.sales.domain.validator.CreateUpdateProductsDtoValidator;
+import br.com.microservices.sales.web.request.CreateUpdateProductDto;
+import br.com.microservices.sales.web.response.GetProductDto;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class CreateProductUseCase {
 
-    private final ProductRepository repository;
     private final ProductFactory productFactory;
-    public CreateProductUseCase(ProductRepository repository, ProductFactory productFactory) {
-        this.repository = repository;
+    public CreateProductUseCase(ProductFactory productFactory) {
         this.productFactory = productFactory;
     }
 
-    public Set<Product> create(Set<Product> products) {
-        Set<Product> productList = new HashSet<>();
+    public Set<GetProductDto> create(Set<CreateUpdateProductDto> products) {
+        Set<GetProductDto> productList = new HashSet<>();
 
-        for (Product product : products) {
-            Product create = productFactory.create(product.getCode(), product.getUnitValue());
+        for (CreateUpdateProductDto product : products) {
+            Product create = productFactory.create(product.code(), product.unitValue());
             Validator.validate(new CreateUpdateProductsDtoValidator(), create);
-            productList.add(create);
+            productList.add(new GetProductDto(create.code(), create.unitValue()));
         }
 
         return productList;
-    }
-
-    private CommonProduct createProduct(Product product) {
-        var result = CommonProduct.builder()
-                .code(product.getCode())
-                .unitValue(product.getUnitValue()).build();
-
-        return repository.add(result)
-                .orElseThrow(() -> new ProductException("erro ao tentar criar um novo produto"));
     }
 
 }

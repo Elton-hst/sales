@@ -1,4 +1,4 @@
-package br.com.microservices.sales.web.controller;
+package br.com.microservices.sales.domain.entity;
 
 import br.com.microservices.sales.persistence.entity.ProductEntity;
 import jakarta.persistence.*;

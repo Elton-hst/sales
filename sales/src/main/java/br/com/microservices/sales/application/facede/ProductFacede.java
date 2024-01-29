@@ -1,7 +1,8 @@
 package br.com.microservices.sales.application.facede;
 
 import br.com.microservices.sales.application.useCases.CreateProductUseCase;
-import br.com.microservices.sales.domain.entity.Product;
+import br.com.microservices.sales.web.request.CreateUpdateProductDto;
+import br.com.microservices.sales.web.response.GetProductDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -15,7 +16,7 @@ public class ProductFacede {
         this.createProductUseCase = createProductUseCase;
     }
 
-    public Set<Product> createProduct(Set<Product> products) {
+    public Set<GetProductDto> createProduct(Set<CreateUpdateProductDto> products) {
         return createProductUseCase.create(products);
     }
 }

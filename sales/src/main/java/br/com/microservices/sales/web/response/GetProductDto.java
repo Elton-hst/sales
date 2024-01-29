@@ -1,9 +1,18 @@
 package br.com.microservices.sales.web.response;
 
-import java.util.UUID;
+import br.com.microservices.sales.domain.entity.Product;
+import lombok.Builder;
 
+@Builder
 public record GetProductDto(
-        UUID id,
         String code,
         double unitValue) {
+
+    public Product toProduct() {
+        return new Product(
+                code,
+                unitValue
+        );
+    }
+
 }

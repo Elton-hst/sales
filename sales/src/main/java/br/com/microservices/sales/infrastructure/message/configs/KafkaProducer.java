@@ -1,5 +1,6 @@
 package br.com.microservices.sales.infrastructure.message.configs;
 
+import br.com.microservices.sales.web.response.GetEventDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -13,6 +14,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 
@@ -28,15 +30,15 @@ public class KafkaProducer {
     private String sagaTopic;
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
+    public KafkaTemplate<String, GetEventDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, GetEventDto> producerFactory() {
         var configs = new HashMap<String, Object>();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configs);
     }
 
@@ -50,7 +52,6 @@ public class KafkaProducer {
     @Bean
     public KafkaAdmin.NewTopics Topics() {
         return new KafkaAdmin.NewTopics(
-                //TopicBuilder.name("topic-1").partitions(2).replicas(1).build(),
                 TopicBuilder.name(sagaTopic).partitions(1).build()
         );
     }

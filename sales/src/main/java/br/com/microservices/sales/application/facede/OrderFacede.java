@@ -1,8 +1,8 @@
 package br.com.microservices.sales.application.facede;
 
 import br.com.microservices.sales.application.useCases.CreateOrderUseCases;
-import br.com.microservices.sales.domain.entity.Order;
-import br.com.microservices.sales.domain.entity.Product;
+import br.com.microservices.sales.web.request.CreateUpdateProductDto;
+import br.com.microservices.sales.web.response.GetEventDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -16,7 +16,7 @@ public class OrderFacede {
         this.createOrderUseCases = createOrderUseCases;
     }
 
-    public Order createOrder(Set<Product> products){
+    public GetEventDto createOrder(Set<CreateUpdateProductDto> products){
         return createOrderUseCases.create(products);
     }
 }

@@ -1,51 +1,57 @@
 package br.com.microservices.sales.application.useCases;
 
-import br.com.microservices.sales.application.common.CommonOrder;
-import br.com.microservices.sales.application.exception.OrderException;
 import br.com.microservices.sales.domain.configs.factory.OrderFactory;
 import br.com.microservices.sales.domain.configs.validation.Validator;
 import br.com.microservices.sales.domain.entity.Order;
-import br.com.microservices.sales.domain.entity.Product;
-import br.com.microservices.sales.domain.repository.OrderRepository;
 import br.com.microservices.sales.domain.validator.CreateUpdateOrderDtoValidator;
+import br.com.microservices.sales.web.request.CreateUpdadeOrderDto;
+import br.com.microservices.sales.web.request.CreateUpdateEventDto;
+import br.com.microservices.sales.web.request.CreateUpdateProductDto;
+import br.com.microservices.sales.web.response.GetEventDto;
+import br.com.microservices.sales.web.response.GetProductDto;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CreateOrderUseCases {
 
-    private final OrderRepository repository;
-    private final CreateProductUseCase createProductUseCase;
     private final OrderFactory orderFactory;
+    private final CreateProductUseCase productUseCase;
     private final CreateEventUseCases createEventUseCases;
-    public CreateOrderUseCases(OrderRepository repository, CreateProductUseCase createProductUseCase, OrderFactory orderFactory, CreateEventUseCases createEventUseCases) {
-        this.repository = repository;
-        this.createProductUseCase = createProductUseCase;
+    public CreateOrderUseCases(OrderFactory orderFactory, CreateProductUseCase productUseCase, CreateEventUseCases createEventUseCases) {
         this.orderFactory = orderFactory;
+        this.productUseCase = productUseCase;
         this.createEventUseCases = createEventUseCases;
     }
 
-    public Order create(Set<Product> products) {
-        var newProducts = this.createProductUseCase.create(products);
-        var create = this.orderFactory.create(newProducts);
-        Validator.validate(new CreateUpdateOrderDtoValidator(), create);
-        return add(create);
+    public GetEventDto create(Set<CreateUpdateProductDto> productDto) {
+        var newProduct = createProduct(productDto);
+        CreateUpdadeOrderDto orderDto = new CreateUpdadeOrderDto(newProduct.stream()
+                .map(GetProductDto::toProduct).collect(Collectors.toSet()));
+        var order = this.orderFactory.create(orderDto);
+        Validator.validate(new CreateUpdateOrderDtoValidator(), order);
+        var newOrder = add(order).toOrderDto();
+        return createEvent(newOrder.toOrder());
     }
 
-    private CommonOrder add(Order order) {
-        CommonOrder newOrder = CommonOrder.builder()
-                .products(order.getProducts())
-                .transactionId(generateTransactionId())
-                .createdAt(LocalDateTime.now()).build();
-
-        return this.repository.add(newOrder)
-                .orElseThrow(() -> new OrderException("Error while trying to create an Order"));
+    private Order add(Order order) {
+        return new Order(
+                order.products(),
+                LocalDateTime.now(),
+                generateTransactionId()
+        );
     }
 
-    private void createEvent(CommonOrder order) {
-        var event = createEventUseCases.create(order);
+    private Set<GetProductDto> createProduct(Set<CreateUpdateProductDto> productDto) {
+        return productUseCase.create(productDto);
+    }
+
+    private GetEventDto createEvent(Order order) {
+        CreateUpdateEventDto eventDto = new CreateUpdateEventDto(order);
+        return createEventUseCases.create(eventDto);
     }
 
     private static String generateTransactionId() {

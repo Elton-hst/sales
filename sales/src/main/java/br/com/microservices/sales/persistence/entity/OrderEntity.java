@@ -1,6 +1,6 @@
 package br.com.microservices.sales.persistence.entity;
 
-import br.com.microservices.sales.application.common.CommonOrder;
+import br.com.microservices.sales.domain.entity.Order;
 import br.com.microservices.sales.persistence.entity.basic.BasicEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -28,18 +28,17 @@ public class OrderEntity extends BasicEntity {
     private double totalAmount;
     private int totalItems;
 
-    public CommonOrder toOrder() {
-        return CommonOrder.builder()
-                .id(getId())
-                .products(products.stream()
+    public Order toOrder() {
+        return new Order(
+                getId(),
+                products.stream()
                         .map(ProductEntity::toProduct)
-                        .collect(Collectors.toSet()))
-                .quantity(quantity)
-                .createdAt(createdAt)
-                .transactionId(transactionId)
-                .totalAmount(totalAmount)
-                .totalItems(totalItems)
-                .build();
+                        .collect(Collectors.toSet()),
+                quantity,
+                createdAt,
+                transactionId,
+                totalAmount,
+                totalItems);
     }
 
 }

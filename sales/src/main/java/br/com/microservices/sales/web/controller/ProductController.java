@@ -1,7 +1,7 @@
 package br.com.microservices.sales.web.controller;
 
-import br.com.microservices.sales.application.common.CommonProduct;
 import br.com.microservices.sales.application.facede.ProductFacede;
+import br.com.microservices.sales.web.request.CreateUpdateProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,8 @@ public class ProductController {
     private final ProductFacede useCase;
 
     @PostMapping({"/criar"})
-    public ResponseEntity<?> createProduct(@RequestBody Set<CommonProduct> products) {
-        var inserted = useCase.createProduct       (products);
+    public ResponseEntity<?> createProduct(@RequestBody Set<CreateUpdateProductDto> products) {
+        var inserted = useCase.createProduct(products);
         return new ResponseEntity<>(inserted, HttpStatus.CREATED);
     }
 

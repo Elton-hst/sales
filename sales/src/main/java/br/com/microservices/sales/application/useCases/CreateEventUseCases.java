@@ -1,40 +1,36 @@
 package br.com.microservices.sales.application.useCases;
 
-import br.com.microservices.sales.application.common.CommonEvent;
-import br.com.microservices.sales.application.common.CommonOrder;
 import br.com.microservices.sales.application.exception.EventException;
+import br.com.microservices.sales.domain.entity.Event;
 import br.com.microservices.sales.domain.repository.EventRepository;
 import br.com.microservices.sales.infrastructure.message.producer.SagaProducer;
-import br.com.microservices.sales.infrastructure.utils.JsonUtil;
+import br.com.microservices.sales.web.request.CreateUpdateEventDto;
+import br.com.microservices.sales.web.response.GetEventDto;
+
+import java.time.LocalDateTime;
 
 public class CreateEventUseCases {
 
     private final EventRepository repository;
     private final SagaProducer producer;
-    private final JsonUtil jsonUtil;
-    public CreateEventUseCases(EventRepository repository, SagaProducer producer, JsonUtil jsonUtil) {
+    public CreateEventUseCases(EventRepository repository, SagaProducer producer) {
         this.repository = repository;
         this.producer = producer;
-        this.jsonUtil = jsonUtil;
     }
 
-    public CommonEvent create(CommonOrder order) {
-        CommonEvent event = CommonEvent.builder()
-                .orderId(order.getId())
-                .payload(order)
-                .transactionId(order.getTransactionId())
-                .build();
-
-        sendEvent(order);
-
-        return add(event);
+    public GetEventDto create(CreateUpdateEventDto eventDto) {
+        var event = new Event(
+                eventDto.order(),
+                "Seila",
+                "ATIVO",
+                LocalDateTime.now()
+        );
+        var newEvent = add(event).toEventDto();
+        producer.sendEvent(newEvent);
+        return newEvent;
     }
 
-    private void sendEvent(CommonOrder order) {
-        producer.sendEvent(jsonUtil.toJson(order));
-    }
-
-    private CommonEvent add(CommonEvent event) {
+    private Event add(Event event) {
         return repository.add(event)
                 .orElseThrow(() -> new EventException("Erro ao tentar criar um evento"));
     }

@@ -51,6 +51,8 @@ Resposta:
     }
   ],
   "createdAt": "2023-04-21",
-  "transactionId": "1682087576536_99d2ca6c-f074-41a6-92e0-21700148b519"
+  "transactionId": "1706392160435_3f9108c8-3ae2-423f-8dd7-a7a502ad59b3",
+  "totalAmount": 25,
+  "totalItems": 2
 }
 ```

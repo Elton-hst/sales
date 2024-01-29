@@ -1,10 +1,10 @@
 package br.com.microservices.sales.domain.repository;
 
-import br.com.microservices.sales.application.common.CommonOrder;
 import br.com.microservices.sales.domain.configs.repository.CrudRepository;
+import br.com.microservices.sales.domain.entity.Order;
 
 import java.util.UUID;
 
-public interface OrderRepository extends CrudRepository<CommonOrder, UUID> {
+public interface OrderRepository extends CrudRepository<Order, UUID> {
 
 }
